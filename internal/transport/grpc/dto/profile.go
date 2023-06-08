@@ -13,15 +13,15 @@ func NewGetProfileResponse(profile entity.Profile) *api.GetProfileResponse {
 	}
 	email := ""
 	if profile.Email != nil {
-		id = *profile.Email
+		email = *profile.Email
 	}
 	nickname := ""
 	if profile.Nickname != nil {
-		id = *profile.Nickname
+		nickname = *profile.Nickname
 	}
 	role := ""
 	if profile.Role != nil {
-		id = *profile.Role
+		role = *profile.Role
 	}
 	var registrationTimestamp *timestamppb.Timestamp = nil
 	if profile.RegistrationTimestamp != nil {
