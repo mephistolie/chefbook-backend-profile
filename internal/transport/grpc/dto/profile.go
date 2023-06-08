@@ -27,9 +27,9 @@ func NewGetProfileResponse(profile entity.Profile) *api.GetProfileResponse {
 	if profile.RegistrationTimestamp != nil {
 		registrationTimestamp = timestamppb.New(*profile.RegistrationTimestamp)
 	}
-	var oauthPtr *api.OAuth = nil
+	var oauthPtr *api.OAuthConnections = nil
 	if profile.OAuth != nil {
-		oauth := api.OAuth{}
+		oauth := api.OAuthConnections{}
 		if profile.OAuth.GoogleId != nil {
 			oauth.GoogleId = *profile.OAuth.GoogleId
 		}

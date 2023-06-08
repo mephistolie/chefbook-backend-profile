@@ -18,14 +18,14 @@ message GetProfileResponse {
   string role = 4;
   google.protobuf.Timestamp registrationTimestamp = 5;
   bool isBlocked = 6;
-  OAuth oAuth = 7;
+  OAuthConnections oAuth = 7;
   string firstName = 8;
   string lastName = 9;
   string description = 10;
   string avatar = 11;
 }
 
-message OAuth {
+message OAuthConnections {
   string googleId = 1;
   int64 vkId = 2;
 }
