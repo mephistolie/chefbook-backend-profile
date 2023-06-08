@@ -1,0 +1,10 @@
+syntax = "proto3";
+package v1;
+
+option go_package = "github.com/mephistolie/chefbook-backend-profile/api/proto/v1";
+
+import "v1/get-profile.proto";
+
+service ProfileService {
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+}

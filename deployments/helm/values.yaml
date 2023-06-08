@@ -1,0 +1,58 @@
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  container: chefbook-backend-profile-service
+  registry: ""
+  pullPolicy: IfNotPresent
+  tag: ""
+imagePullSecrets: [ ]
+
+config:
+  develop: false
+  # Leave empty for stdout only
+  logsPath: ""
+
+services:
+  auth:
+    name: chefbook-backend-auth-service
+    namespace: ""
+    port: 8080
+  user:
+    name: chefbook-backend-user-service
+    namespace: ""
+    port: 8080
+
+service:
+  type: ClusterIP
+  port: 8080
+
+replicaCount: 2
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  # targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+podAnnotations: { }
+
+podSecurityContext: { }
+# fsGroup: 2000
+
+securityContext: { }
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+# runAsUser: 1000
+
+resources: { }
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity: { }

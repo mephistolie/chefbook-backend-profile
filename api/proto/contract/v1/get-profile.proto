@@ -1,0 +1,31 @@
+syntax = "proto3";
+package v1;
+
+option go_package = "github.com/mephistolie/chefbook-backend-profile/api/proto/v1";
+
+import "google/protobuf/timestamp.proto";
+
+message GetProfileRequest {
+  string profileId = 1;
+  string profileNickname = 2;
+  string requesterId = 3;
+}
+
+message GetProfileResponse {
+  string id = 1;
+  string email = 2;
+  string nickname = 3;
+  string role = 4;
+  google.protobuf.Timestamp registrationTimestamp = 5;
+  bool isBlocked = 6;
+  OAuth oAuth = 7;
+  string firstName = 8;
+  string lastName = 9;
+  string description = 10;
+  string avatar = 11;
+}
+
+message OAuth {
+  string googleId = 1;
+  int64 vkId = 2;
+}
