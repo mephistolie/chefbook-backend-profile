@@ -6,5 +6,6 @@ import (
 )
 
 type Service interface {
+	GetProfilesMinInfo(profileIds []string) (map[string]entity.ProfileMinInfo, error)
 	GetProfile(profileId *uuid.UUID, profileNickname *string, requesterId uuid.UUID) (entity.Profile, error)
 }

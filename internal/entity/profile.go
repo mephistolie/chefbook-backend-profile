@@ -4,6 +4,12 @@ import (
 	"time"
 )
 
+type ProfileMinInfo struct {
+	Id          string
+	VisibleName *string
+	Avatar      *string
+}
+
 type Profile struct {
 	// Auth Service
 	Id                    *string

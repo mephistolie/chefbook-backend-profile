@@ -1,0 +1,17 @@
+syntax = "proto3";
+package v1;
+
+option go_package = "github.com/mephistolie/chefbook-backend-profile/api/proto/v1";
+
+message ProfileMinInfo {
+  string visibleName = 1;
+  string avatar = 2;
+}
+
+message GetProfilesMinInfoRequest {
+  repeated string profileIds = 1;
+}
+
+message GetProfilesMinInfoResponse {
+  map<string, ProfileMinInfo> infos = 1;
+}

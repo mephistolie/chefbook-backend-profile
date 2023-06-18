@@ -8,6 +8,28 @@ import (
 	"github.com/mephistolie/chefbook-backend-profile/internal/transport/grpc/dto"
 )
 
+func (s *ProfileServer) GetProfilesMinInfo(_ context.Context, req *api.GetProfilesMinInfoRequest) (*api.GetProfilesMinInfoResponse, error) {
+	response, err := s.service.GetProfilesMinInfo(req.ProfileIds)
+	if err != nil {
+		return nil, err
+	}
+
+	infos := make(map[string]*api.ProfileMinInfo)
+	for id, info := range response {
+		infoDto := api.ProfileMinInfo{}
+		if info.VisibleName != nil {
+			infoDto.VisibleName = *info.VisibleName
+		}
+		if info.Avatar != nil {
+			infoDto.Avatar = *info.Avatar
+		}
+
+		infos[id] = &infoDto
+	}
+
+	return &api.GetProfilesMinInfoResponse{Infos: infos}, nil
+}
+
 func (s *ProfileServer) GetProfile(_ context.Context, req *api.GetProfileRequest) (*api.GetProfileResponse, error) {
 	requesterId, err := uuid.Parse(req.RequesterId)
 	if err != nil {
