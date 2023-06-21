@@ -15,7 +15,7 @@ type Profile struct {
 	Id                    *string
 	Nickname              *string
 	Email                 *string
-	Role                  string
+	Role                  *string
 	OAuth                 *OAuth
 	IsBlocked             bool
 	RegistrationTimestamp *time.Time

@@ -74,7 +74,7 @@ func (s *Service) fillProfileAuthInfo(id, nickname string, profile *entity.Profi
 		profile.Nickname = info.Nickname
 		profile.IsBlocked = info.IsBlocked
 		profile.Email = &info.Email
-		profile.Role = info.Role
+		profile.Role = &info.Role
 		registrationTimestamp := info.RegistrationTimestamp.AsTime()
 		profile.RegistrationTimestamp = &registrationTimestamp
 
