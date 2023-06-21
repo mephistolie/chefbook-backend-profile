@@ -76,9 +76,6 @@ func (s *Service) fillProfileAuthInfo(id, nickname string, profile *entity.Profi
 		if len(info.Email) > 0 {
 			profile.Email = &info.Email
 		}
-		if len(info.Nickname) > 0 {
-			profile.Nickname = &info.Nickname
-		}
 		if len(info.Role) > 0 {
 			role := strings.ToLower(info.Role)
 			profile.Role = &role
@@ -88,14 +85,10 @@ func (s *Service) fillProfileAuthInfo(id, nickname string, profile *entity.Profi
 		profile.RegistrationTimestamp = &registrationTimestamp
 
 		if info.OAuth != nil {
-			oauth := entity.OAuth{}
-			if len(info.OAuth.GoogleId) > 0 {
-				oauth.GoogleId = &info.OAuth.GoogleId
+			profile.OAuth = &entity.OAuth{
+				GoogleId: info.OAuth.GoogleId,
+				VkId:     info.OAuth.VkId,
 			}
-			if info.OAuth.VkId > 0 {
-				oauth.VkId = &info.OAuth.VkId
-			}
-			profile.OAuth = &oauth
 		}
 	}
 
@@ -111,19 +104,10 @@ func (s *Service) fillProfileUserInfo(id string, profile *entity.Profile, wg *sy
 
 	if err == nil {
 		profile.Id = &info.UserId
-
-		if len(info.FirstName) > 0 {
-			profile.FirstName = &info.FirstName
-		}
-		if len(info.LastName) > 0 {
-			profile.LastName = &info.LastName
-		}
-		if len(info.Description) > 0 {
-			profile.Description = &info.Description
-		}
-		if len(info.Avatar) > 0 {
-			profile.AvatarLink = &info.Avatar
-		}
+		profile.FirstName = info.FirstName
+		profile.LastName = info.LastName
+		profile.Description = info.Description
+		profile.AvatarLink = info.Avatar
 	}
 
 	wg.Done()

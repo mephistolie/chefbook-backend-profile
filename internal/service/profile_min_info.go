@@ -13,21 +13,23 @@ import (
 func (s *Service) GetProfilesMinInfo(profileIds []string) (map[string]entity.ProfileMinInfo, error) {
 	wg := sync.WaitGroup{}
 
-	infos := make(map[string]entity.ProfileMinInfo)
 	fallbackNames := make(map[string]string)
 
 	wg.Add(1)
-	go s.fillProfilesAuthNames(profileIds, &fallbackNames, &wg)
+	go func() {
+		fallbackNames = s.getProfilesAuthNames(profileIds)
+		wg.Done()
+	}()
 
-	hasAllNames := s.fillProfilesUserInfo(profileIds, &infos)
+	infos, hasAllNames := s.getProfilesUserInfo(profileIds)
 
 	if !hasAllNames {
-		log.Debug("unable to get user name for several users; using nicknames...")
 		wg.Wait()
 		for id, info := range infos {
 			if info.VisibleName == nil {
 				if fallbackName, ok := fallbackNames[id]; ok {
 					info.VisibleName = &fallbackName
+					infos[id] = info
 				}
 			}
 		}
@@ -36,7 +38,7 @@ func (s *Service) GetProfilesMinInfo(profileIds []string) (map[string]entity.Pro
 	return infos, nil
 }
 
-func (s *Service) fillProfilesUserInfo(profileIds []string, infos *map[string]entity.ProfileMinInfo) bool {
+func (s *Service) getProfilesUserInfo(profileIds []string) (map[string]entity.ProfileMinInfo, bool) {
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 2*time.Second)
 	res, err := s.repos.User.GetUsersMinInfo(ctx, &user.GetUsersMinInfoRequest{UserIds: profileIds})
 	cancelCtx()
@@ -46,37 +48,40 @@ func (s *Service) fillProfilesUserInfo(profileIds []string, infos *map[string]en
 
 	hasAllNames := responseProfileCount >= requestProfilesCount
 
+	infos := make(map[string]entity.ProfileMinInfo)
 	if err == nil {
 		for id, dto := range res.Infos {
 			info := entity.ProfileMinInfo{
-				Id: id,
+				Id:          id,
+				VisibleName: dto.FullName,
+				Avatar:      dto.Avatar,
 			}
-			if len(dto.FullName) > 0 {
-				info.VisibleName = &dto.FullName
-			} else {
+			if info.VisibleName == nil {
 				hasAllNames = false
 			}
-			if len(dto.Avatar) > 0 {
-				info.Avatar = &dto.Avatar
-			}
-
-			(*infos)[id] = info
+			infos[id] = info
 		}
+	} else {
+		log.Warnf("unable to get profiles minimal info")
 	}
 
-	return hasAllNames
+	return infos, hasAllNames
 }
 
-func (s *Service) fillProfilesAuthNames(profileIds []string, names *map[string]string, wg *sync.WaitGroup) {
+func (s *Service) getProfilesAuthNames(profileIds []string) map[string]string {
 	ctx, cancelCtx := context.WithTimeout(context.Background(), 2*time.Second)
 	res, err := s.repos.Auth.GetVisibleNames(ctx, &auth.GetVisibleNamesRequest{UserIds: profileIds})
 	cancelCtx()
 
+	names := make(map[string]string)
+
 	if err == nil {
 		for id, name := range res.UserVisibleNames {
-			(*names)[id] = name
+			names[id] = name
 		}
+	} else {
+		log.Warnf("unable to get profiles auth names")
 	}
 
-	wg.Done()
+	return names
 }

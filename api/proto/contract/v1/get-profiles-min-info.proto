@@ -4,8 +4,8 @@ package v1;
 option go_package = "github.com/mephistolie/chefbook-backend-profile/api/proto/v1";
 
 message ProfileMinInfo {
-  string visibleName = 1;
-  string avatar = 2;
+  optional string visibleName = 1;
+  optional string avatar = 2;
 }
 
 message GetProfilesMinInfoRequest {

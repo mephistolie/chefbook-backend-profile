@@ -4,12 +4,12 @@ go 1.20
 
 require (
 	github.com/google/uuid v1.3.0
-	github.com/mephistolie/chefbook-backend-auth/api v1.5.0
+	github.com/mephistolie/chefbook-backend-auth/api v1.6.0
 	github.com/mephistolie/chefbook-backend-common/log v0.6.0
 	github.com/mephistolie/chefbook-backend-common/responses v0.9.0
 	github.com/mephistolie/chefbook-backend-common/shutdown v0.6.0
 	github.com/mephistolie/chefbook-backend-profile/api v1.0.1
-	github.com/mephistolie/chefbook-backend-user/api v1.2.0
+	github.com/mephistolie/chefbook-backend-user/api v1.3.0
 	github.com/peterbourgon/ff/v3 v3.3.0
 	google.golang.org/grpc v1.54.0
 	google.golang.org/protobuf v1.30.0

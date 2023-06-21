@@ -19,13 +19,13 @@ message GetProfileResponse {
   google.protobuf.Timestamp registrationTimestamp = 5;
   bool isBlocked = 6;
   OAuthConnections oAuth = 7;
-  string firstName = 8;
-  string lastName = 9;
-  string description = 10;
-  string avatar = 11;
+  optional string firstName = 8;
+  optional string lastName = 9;
+  optional string description = 10;
+  optional string avatar = 11;
 }
 
 message OAuthConnections {
-  string googleId = 1;
-  int64 vkId = 2;
+  optional string googleId = 1;
+  optional int64 vkId = 2;
 }

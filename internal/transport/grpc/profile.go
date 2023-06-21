@@ -16,14 +16,10 @@ func (s *ProfileServer) GetProfilesMinInfo(_ context.Context, req *api.GetProfil
 
 	infos := make(map[string]*api.ProfileMinInfo)
 	for id, info := range response {
-		infoDto := api.ProfileMinInfo{}
-		if info.VisibleName != nil {
-			infoDto.VisibleName = *info.VisibleName
+		infoDto := api.ProfileMinInfo{
+			VisibleName: info.VisibleName,
+			Avatar:      info.Avatar,
 		}
-		if info.Avatar != nil {
-			infoDto.Avatar = *info.Avatar
-		}
-
 		infos[id] = &infoDto
 	}
 

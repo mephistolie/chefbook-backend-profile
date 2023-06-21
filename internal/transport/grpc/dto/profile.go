@@ -27,33 +27,12 @@ func NewGetProfileResponse(profile entity.Profile) *api.GetProfileResponse {
 	if profile.RegistrationTimestamp != nil {
 		registrationTimestamp = timestamppb.New(*profile.RegistrationTimestamp)
 	}
-	var oauthPtr *api.OAuthConnections = nil
+	var oAuth *api.OAuthConnections = nil
 	if profile.OAuth != nil {
-		oauth := api.OAuthConnections{}
-		if profile.OAuth.GoogleId != nil {
-			oauth.GoogleId = *profile.OAuth.GoogleId
+		oAuth = &api.OAuthConnections{
+			GoogleId: profile.OAuth.GoogleId,
+			VkId:     profile.OAuth.VkId,
 		}
-		if profile.OAuth.VkId != nil {
-			oauth.VkId = *profile.OAuth.VkId
-		}
-		oauthPtr = &oauth
-	}
-
-	firstName := ""
-	if profile.FirstName != nil {
-		firstName = *profile.FirstName
-	}
-	lastName := ""
-	if profile.LastName != nil {
-		lastName = *profile.LastName
-	}
-	description := ""
-	if profile.Description != nil {
-		description = *profile.Description
-	}
-	avatar := ""
-	if profile.AvatarLink != nil {
-		avatar = *profile.AvatarLink
 	}
 
 	return &api.GetProfileResponse{
@@ -63,11 +42,11 @@ func NewGetProfileResponse(profile entity.Profile) *api.GetProfileResponse {
 		Role:                  role,
 		RegistrationTimestamp: registrationTimestamp,
 		IsBlocked:             profile.IsBlocked,
-		OAuth:                 oauthPtr,
+		OAuth:                 oAuth,
 
-		FirstName:   firstName,
-		LastName:    lastName,
-		Description: description,
-		Avatar:      avatar,
+		FirstName:   profile.FirstName,
+		LastName:    profile.LastName,
+		Description: profile.Description,
+		Avatar:      profile.AvatarLink,
 	}
 }
