@@ -13,7 +13,7 @@ message GetProfileRequest {
 
 message GetProfileResponse {
   string id = 1;
-  string email = 2;
+  optional string email = 2;
   optional string nickname = 3;
   string role = 4;
   google.protobuf.Timestamp registrationTimestamp = 5;

@@ -11,10 +11,6 @@ func NewGetProfileResponse(profile entity.Profile) *api.GetProfileResponse {
 	if profile.Id != nil {
 		id = *profile.Id
 	}
-	email := ""
-	if profile.Email != nil {
-		email = *profile.Email
-	}
 	var registrationTimestamp *timestamppb.Timestamp = nil
 	if profile.RegistrationTimestamp != nil {
 		registrationTimestamp = timestamppb.New(*profile.RegistrationTimestamp)
@@ -29,7 +25,7 @@ func NewGetProfileResponse(profile entity.Profile) *api.GetProfileResponse {
 
 	return &api.GetProfileResponse{
 		Id:                    id,
-		Email:                 email,
+		Email:                 profile.Email,
 		Nickname:              profile.Nickname,
 		Role:                  profile.Role,
 		RegistrationTimestamp: registrationTimestamp,
