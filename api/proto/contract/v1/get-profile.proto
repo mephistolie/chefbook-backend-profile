@@ -14,7 +14,7 @@ message GetProfileRequest {
 message GetProfileResponse {
   string id = 1;
   string email = 2;
-  string nickname = 3;
+  optional string nickname = 3;
   string role = 4;
   google.protobuf.Timestamp registrationTimestamp = 5;
   bool isBlocked = 6;

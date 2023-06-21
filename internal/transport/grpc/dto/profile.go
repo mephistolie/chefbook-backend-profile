@@ -15,14 +15,6 @@ func NewGetProfileResponse(profile entity.Profile) *api.GetProfileResponse {
 	if profile.Email != nil {
 		email = *profile.Email
 	}
-	nickname := ""
-	if profile.Nickname != nil {
-		nickname = *profile.Nickname
-	}
-	role := ""
-	if profile.Role != nil {
-		role = *profile.Role
-	}
 	var registrationTimestamp *timestamppb.Timestamp = nil
 	if profile.RegistrationTimestamp != nil {
 		registrationTimestamp = timestamppb.New(*profile.RegistrationTimestamp)
@@ -38,8 +30,8 @@ func NewGetProfileResponse(profile entity.Profile) *api.GetProfileResponse {
 	return &api.GetProfileResponse{
 		Id:                    id,
 		Email:                 email,
-		Nickname:              nickname,
-		Role:                  role,
+		Nickname:              profile.Nickname,
+		Role:                  profile.Role,
 		RegistrationTimestamp: registrationTimestamp,
 		IsBlocked:             profile.IsBlocked,
 		OAuth:                 oAuth,

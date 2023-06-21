@@ -7,7 +7,6 @@ import (
 	"github.com/mephistolie/chefbook-backend-common/responses/fail"
 	"github.com/mephistolie/chefbook-backend-profile/internal/entity"
 	user "github.com/mephistolie/chefbook-backend-user/api/proto/implementation/v1"
-	"strings"
 	"sync"
 	"time"
 )
@@ -72,15 +71,10 @@ func (s *Service) fillProfileAuthInfo(id, nickname string, profile *entity.Profi
 
 	if err == nil {
 		profile.Id = &info.Id
-
-		if len(info.Email) > 0 {
-			profile.Email = &info.Email
-		}
-		if len(info.Role) > 0 {
-			role := strings.ToLower(info.Role)
-			profile.Role = &role
-		}
+		profile.Nickname = info.Nickname
 		profile.IsBlocked = info.IsBlocked
+		profile.Email = &info.Email
+		profile.Role = info.Role
 		registrationTimestamp := info.RegistrationTimestamp.AsTime()
 		profile.RegistrationTimestamp = &registrationTimestamp
 
