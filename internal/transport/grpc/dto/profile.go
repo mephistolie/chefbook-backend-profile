@@ -36,5 +36,7 @@ func NewGetProfileResponse(profile entity.Profile) *api.GetProfileResponse {
 		LastName:    profile.LastName,
 		Description: profile.Description,
 		Avatar:      profile.AvatarLink,
+
+		SubscriptionPlan: profile.SubscriptionPlan,
 	}
 }

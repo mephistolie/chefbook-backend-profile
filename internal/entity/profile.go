@@ -25,6 +25,9 @@ type Profile struct {
 	LastName    *string
 	Description *string
 	AvatarLink  *string
+
+	// Subscription Service
+	SubscriptionPlan string
 }
 
 type OAuth struct {

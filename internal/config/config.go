@@ -14,15 +14,12 @@ type Config struct {
 	Port        *int
 	LogsPath    *string
 
-	AuthService AuthService
-	UserService UserService
+	AuthService         Service
+	UserService         Service
+	SubscriptionService Service
 }
 
-type AuthService struct {
-	Addr *string
-}
-
-type UserService struct {
+type Service struct {
 	Addr *string
 }
 
@@ -39,8 +36,9 @@ func (c Config) Print() {
 		"Port: %v\n"+
 		"Logs path: %v\n\n"+
 		"Auth Service Address: %v\n"+
-		"User Service Address: %v\n",
+		"User Service Address: %v\n"+
+		"Subscription Service Address: %v\n\n",
 		*c.Environment, *c.Port, *c.LogsPath,
-		*c.AuthService.Addr, *c.UserService.Addr,
+		*c.AuthService.Addr, *c.UserService.Addr, *c.SubscriptionService.Addr,
 	)
 }

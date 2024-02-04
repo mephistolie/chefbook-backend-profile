@@ -51,6 +51,10 @@ spec:
             - name: USER_ADDR
               value: "{{ .Values.services.user.name }}.{{ .Values.services.user.namespace | default .Release.Namespace }}.svc.cluster.local:{{ .Values.services.user.port }}"
 
+            # Subscription Microservice
+
+            - name: SUBSCRIPTION_ADDR
+              value: "{{ .Values.services.subscription.name }}.{{ .Values.services.subscription.namespace | default .Release.Namespace }}.svc.cluster.local:{{ .Values.services.subscription.port }}"
 
           ports:
             - name: http

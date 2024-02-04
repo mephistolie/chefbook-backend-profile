@@ -23,6 +23,7 @@ message GetProfileResponse {
   optional string lastName = 9;
   optional string description = 10;
   optional string avatar = 11;
+  string subscriptionPlan = 12;
 }
 
 message OAuthConnections {

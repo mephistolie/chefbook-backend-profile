@@ -5,7 +5,9 @@ import (
 	"github.com/google/uuid"
 	auth "github.com/mephistolie/chefbook-backend-auth/api/proto/implementation/v1"
 	"github.com/mephistolie/chefbook-backend-common/responses/fail"
+	subscriptionUtils "github.com/mephistolie/chefbook-backend-common/subscription"
 	"github.com/mephistolie/chefbook-backend-profile/internal/entity"
+	subscription "github.com/mephistolie/chefbook-backend-subscription/api/proto/implementation/v1"
 	user "github.com/mephistolie/chefbook-backend-user/api/proto/implementation/v1"
 	"sync"
 	"time"
@@ -29,6 +31,9 @@ func (s *Service) GetProfile(profileId *uuid.UUID, profileNickname *string, requ
 
 	wg.Add(1)
 	go s.fillProfileUserInfo(*profile.Id, &profile, &wg)
+
+	wg.Add(1)
+	go s.fillProfileSubscriptionInfo(*profile.Id, &profile, &wg)
 
 	wg.Wait()
 
@@ -102,6 +107,22 @@ func (s *Service) fillProfileUserInfo(id string, profile *entity.Profile, wg *sy
 		profile.LastName = info.LastName
 		profile.Description = info.Description
 		profile.AvatarLink = info.Avatar
+	}
+
+	wg.Done()
+}
+
+func (s *Service) fillProfileSubscriptionInfo(id string, profile *entity.Profile, wg *sync.WaitGroup) {
+	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
+	info, err := s.repos.Subscription.GetProfileCurrentSubscription(ctx, &subscription.GetProfileCurrentSubscriptionRequest{
+		UserId: id,
+	})
+	cancelCtx()
+
+	if err == nil {
+		profile.SubscriptionPlan = info.Plan
+	} else {
+		profile.SubscriptionPlan = subscriptionUtils.PlanFree
 	}
 
 	wg.Done()

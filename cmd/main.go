@@ -15,12 +15,14 @@ func main() {
 		Port:        fs.Int("port", 8080, "service port"),
 		LogsPath:    fs.String("logs-path", "", "logs file path"),
 
-		AuthService: config.AuthService{
+		AuthService: config.Service{
 			Addr: fs.String("auth-addr", "", "auth service address"),
 		},
-
-		UserService: config.UserService{
+		UserService: config.Service{
 			Addr: fs.String("user-addr", "", "user service address"),
+		},
+		SubscriptionService: config.Service{
+			Addr: fs.String("subscription-addr", "", "subscription service address"),
 		},
 	}
 	if err := ff.Parse(fs, os.Args[1:], ff.WithEnvVars()); err != nil {
