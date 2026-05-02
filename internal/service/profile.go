@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func (s *Service) GetProfile(profileId *uuid.UUID, profileNickname *string, requesterId uuid.UUID) (entity.Profile, error) {
+func (s *Service) GetProfile(ctx context.Context, profileId *uuid.UUID, profileNickname *string, requesterId uuid.UUID) (entity.Profile, error) {
 	wg := sync.WaitGroup{}
 
 	profile := entity.Profile{}
@@ -21,7 +21,7 @@ func (s *Service) GetProfile(profileId *uuid.UUID, profileNickname *string, requ
 	id, nickname := s.extractIdentifiers(profileId, profileNickname, &profile)
 
 	wg.Add(1)
-	go s.fillProfileAuthInfo(id, nickname, &profile, &wg)
+	go s.fillProfileAuthInfo(ctx, id, nickname, &profile, &wg)
 	if profile.Id == nil {
 		wg.Wait()
 		if profile.Id == nil {
@@ -30,10 +30,10 @@ func (s *Service) GetProfile(profileId *uuid.UUID, profileNickname *string, requ
 	}
 
 	wg.Add(1)
-	go s.fillProfileUserInfo(*profile.Id, &profile, &wg)
+	go s.fillProfileUserInfo(ctx, *profile.Id, &profile, &wg)
 
 	wg.Add(1)
-	go s.fillProfileSubscriptionInfo(*profile.Id, &profile, &wg)
+	go s.fillProfileSubscriptionInfo(ctx, *profile.Id, &profile, &wg)
 
 	wg.Wait()
 
@@ -66,13 +66,13 @@ func (s *Service) extractIdentifiers(profileId *uuid.UUID, profileNickname *stri
 	return id, nickname
 }
 
-func (s *Service) fillProfileAuthInfo(id, nickname string, profile *entity.Profile, wg *sync.WaitGroup) {
-	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
+func (s *Service) fillProfileAuthInfo(parentCtx context.Context, id, nickname string, profile *entity.Profile, wg *sync.WaitGroup) {
+	ctx, cancelCtx := context.WithTimeout(parentCtx, 5*time.Second)
+	defer cancelCtx()
 	info, err := s.repos.Auth.GetAuthInfo(ctx, &auth.GetAuthInfoRequest{
 		Id:       id,
 		Nickname: nickname,
 	})
-	cancelCtx()
 
 	if err == nil {
 		profile.Id = &info.Id
@@ -94,12 +94,12 @@ func (s *Service) fillProfileAuthInfo(id, nickname string, profile *entity.Profi
 	wg.Done()
 }
 
-func (s *Service) fillProfileUserInfo(id string, profile *entity.Profile, wg *sync.WaitGroup) {
-	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
+func (s *Service) fillProfileUserInfo(parentCtx context.Context, id string, profile *entity.Profile, wg *sync.WaitGroup) {
+	ctx, cancelCtx := context.WithTimeout(parentCtx, 5*time.Second)
+	defer cancelCtx()
 	info, err := s.repos.User.GetUserInfo(ctx, &user.GetUserInfoRequest{
 		UserId: id,
 	})
-	cancelCtx()
 
 	if err == nil {
 		profile.Id = &info.UserId
@@ -112,12 +112,12 @@ func (s *Service) fillProfileUserInfo(id string, profile *entity.Profile, wg *sy
 	wg.Done()
 }
 
-func (s *Service) fillProfileSubscriptionInfo(id string, profile *entity.Profile, wg *sync.WaitGroup) {
-	ctx, cancelCtx := context.WithTimeout(context.Background(), 5*time.Second)
+func (s *Service) fillProfileSubscriptionInfo(parentCtx context.Context, id string, profile *entity.Profile, wg *sync.WaitGroup) {
+	ctx, cancelCtx := context.WithTimeout(parentCtx, 5*time.Second)
+	defer cancelCtx()
 	info, err := s.repos.Subscription.GetProfileCurrentSubscription(ctx, &subscription.GetProfileCurrentSubscriptionRequest{
 		UserId: id,
 	})
-	cancelCtx()
 
 	if err == nil {
 		profile.SubscriptionPlan = info.Plan

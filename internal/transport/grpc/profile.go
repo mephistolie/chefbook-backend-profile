@@ -8,8 +8,8 @@ import (
 	"github.com/mephistolie/chefbook-backend-profile/internal/transport/grpc/dto"
 )
 
-func (s *ProfileServer) GetProfilesMinInfo(_ context.Context, req *api.GetProfilesMinInfoRequest) (*api.GetProfilesMinInfoResponse, error) {
-	response, err := s.service.GetProfilesMinInfo(req.ProfileIds)
+func (s *ProfileServer) GetProfilesMinInfo(ctx context.Context, req *api.GetProfilesMinInfoRequest) (*api.GetProfilesMinInfoResponse, error) {
+	response, err := s.service.GetProfilesMinInfo(ctx, req.ProfileIds)
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +26,7 @@ func (s *ProfileServer) GetProfilesMinInfo(_ context.Context, req *api.GetProfil
 	return &api.GetProfilesMinInfoResponse{Infos: infos}, nil
 }
 
-func (s *ProfileServer) GetProfile(_ context.Context, req *api.GetProfileRequest) (*api.GetProfileResponse, error) {
+func (s *ProfileServer) GetProfile(ctx context.Context, req *api.GetProfileRequest) (*api.GetProfileResponse, error) {
 	requesterId, err := uuid.Parse(req.RequesterId)
 	if err != nil {
 		return nil, fail.GrpcInvalidBody
@@ -45,7 +45,7 @@ func (s *ProfileServer) GetProfile(_ context.Context, req *api.GetProfileRequest
 		profileId = &requesterId
 	}
 
-	profile, err := s.service.GetProfile(profileId, profileNickname, requesterId)
+	profile, err := s.service.GetProfile(ctx, profileId, profileNickname, requesterId)
 	if err != nil {
 		return nil, err
 	}

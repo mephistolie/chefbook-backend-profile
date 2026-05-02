@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func (s *Service) GetProfilesMinInfo(profileIds []string) (map[string]entity.ProfileMinInfo, error) {
+func (s *Service) GetProfilesMinInfo(ctx context.Context, profileIds []string) (map[string]entity.ProfileMinInfo, error) {
 	wg := sync.WaitGroup{}
 
 	var nicknames map[string]string
@@ -20,13 +20,13 @@ func (s *Service) GetProfilesMinInfo(profileIds []string) (map[string]entity.Pro
 
 	wg.Add(1)
 	go func() {
-		nicknames = s.getProfilesAuthNames(profileIds)
+		nicknames = s.getProfilesAuthNames(ctx, profileIds)
 		wg.Done()
 	}()
 
 	wg.Add(1)
 	go func() {
-		users = s.getProfilesUserInfo(profileIds)
+		users = s.getProfilesUserInfo(ctx, profileIds)
 		wg.Done()
 	}()
 
@@ -62,10 +62,10 @@ func (s *Service) GetProfilesMinInfo(profileIds []string) (map[string]entity.Pro
 	return infos, nil
 }
 
-func (s *Service) getProfilesUserInfo(profileIds []string) map[string]*user.UserMinInfo {
-	ctx, cancelCtx := context.WithTimeout(context.Background(), 2*time.Second)
+func (s *Service) getProfilesUserInfo(parentCtx context.Context, profileIds []string) map[string]*user.UserMinInfo {
+	ctx, cancelCtx := context.WithTimeout(parentCtx, 2*time.Second)
+	defer cancelCtx()
 	res, err := s.repos.User.GetUsersMinInfo(ctx, &user.GetUsersMinInfoRequest{UserIds: profileIds})
-	cancelCtx()
 
 	if err != nil {
 		log.Warnf("unable to get profiles minimal info")
@@ -75,10 +75,10 @@ func (s *Service) getProfilesUserInfo(profileIds []string) map[string]*user.User
 	return res.Infos
 }
 
-func (s *Service) getProfilesAuthNames(profileIds []string) map[string]string {
-	ctx, cancelCtx := context.WithTimeout(context.Background(), 2*time.Second)
+func (s *Service) getProfilesAuthNames(parentCtx context.Context, profileIds []string) map[string]string {
+	ctx, cancelCtx := context.WithTimeout(parentCtx, 2*time.Second)
+	defer cancelCtx()
 	res, err := s.repos.Auth.GetVisibleNames(ctx, &auth.GetVisibleNamesRequest{UserIds: profileIds})
-	cancelCtx()
 
 	if err != nil {
 		log.Warnf("unable to get profiles auth names")
