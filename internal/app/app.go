@@ -18,7 +18,7 @@ import (
 )
 
 func Run(cfg *config.Config) {
-	log.Init(*cfg.LogsPath, *cfg.Environment == config.EnvDev)
+	log.InitWithService("profile", *cfg.LogsPath, *cfg.Environment == config.EnvDev)
 	cfg.Print()
 
 	repositories, err := repository.NewRepositories(cfg)

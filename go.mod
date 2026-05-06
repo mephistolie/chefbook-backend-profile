@@ -5,7 +5,7 @@ go 1.26.2
 require (
 	github.com/google/uuid v1.6.0
 	github.com/mephistolie/chefbook-backend-auth/api v1.8.2
-	github.com/mephistolie/chefbook-backend-common/log v0.6.0
+	github.com/mephistolie/chefbook-backend-common/log v0.7.0
 	github.com/mephistolie/chefbook-backend-common/responses v0.9.0
 	github.com/mephistolie/chefbook-backend-common/shutdown v0.6.0
 	github.com/mephistolie/chefbook-backend-common/subscription v0.12.0
@@ -15,6 +15,12 @@ require (
 	github.com/peterbourgon/ff/v3 v3.4.0
 	google.golang.org/grpc v1.80.0
 	google.golang.org/protobuf v1.36.11
+)
+
+require (
+	github.com/mattn/go-colorable v0.1.14 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/rs/zerolog v1.35.1 // indirect
 )
 
 require (
