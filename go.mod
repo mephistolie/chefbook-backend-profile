@@ -5,7 +5,7 @@ go 1.26.2
 require (
 	github.com/google/uuid v1.6.0
 	github.com/mephistolie/chefbook-backend-auth/api v1.8.2
-	github.com/mephistolie/chefbook-backend-common/log v0.7.0
+	github.com/mephistolie/chefbook-backend-common/log v0.8.0
 	github.com/mephistolie/chefbook-backend-common/responses v0.9.0
 	github.com/mephistolie/chefbook-backend-common/shutdown v0.6.0
 	github.com/mephistolie/chefbook-backend-common/subscription v0.12.0
